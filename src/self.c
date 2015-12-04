@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
+
 /*
  * Declare the class.
  */
@@ -34,23 +34,21 @@ method(object,
 	printf("%s\n", this->name);
 }
 
-destructor(object)
-{
-	free(this);
-}
+static void destroy(struct object * self);
+static struct object proto = {
+	.set_name = set_name,
+	.print_name = print_name,
+	.get_name = get_name,
+};
 
 constructor(object,
 	    void)
 {
-	struct object * self = alloc(object);
-	if (this) {
-		register(get_name);
-		register(set_name);
-		register(print_name);
-		register(destroy);
-	}
+}
 
-	return self;
+destructor(object)
+{
+	free(this);
 }
 
 #ifdef CLASS

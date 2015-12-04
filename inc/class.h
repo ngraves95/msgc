@@ -46,13 +46,26 @@
 /*
  * Creates a heap-allocated object.
  */
-#define constructor(class, ...)			\
-	struct class * class##_new (__VA_ARGS__)
+/* #define constructor(class, ...)			\ */
+/* 	struct class * class##_new (__VA_ARGS__) */
+
+#define constructor(class, ...)				\
+	struct class * class##_new (__VA_ARGS__)	\
+	{						\
+		struct class * self = alloc(class);	\
+		if (this) {				\
+			*self = proto;			\
+			self.destroy = destroy;		\
+		} else {				\
+			return NULL;			\
+		}
 
 /*
  * Destroys a heap-allocated object.
  */
 #define destructor(class)				\
+	return self;					\
+	}						\
 	static void destroy(struct class * self)
 
 #define register(method_name) this->method_name = method_name
@@ -82,6 +95,10 @@
 		type##_public				\
 		void (*destroy) (struct type *);	\
 	};
+	typedef struct type * type;
+
+#define export_constructor(class, ...)		\
+	struct class * class##_new (__VA_ARGS__)
 
 #define interface(body) body
 
@@ -91,5 +108,11 @@
 #define xcat(a,b) a##b
 #define concat(a, b) xcat(a,b)
 #define this ((struct concat(CLASS(), _full) *) (((struct concat(CLASS(), _private) *) self) - 1))
+
+#define use(method) .##method = method,
+#define proto(class)					\
+	static void destroy(struct object * self);	\
+	static struct class proto =
+
 
 #endif

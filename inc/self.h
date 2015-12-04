@@ -13,11 +13,6 @@
  */
 
 export_class(object);
-
-/*
- * Static functions.
- */
-constructor(object,
-	    void);
+export_constructor(object, void);
 
 #endif

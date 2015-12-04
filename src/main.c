@@ -21,7 +21,7 @@ int main(void)
 	_(obj, set_name, "Nick");
 	_(obj, set_name, _(obj, get_name));
 	_(obj, print_name);
-	_(obj, destroy);
+        _(obj, destroy);
 
 	return 0;
 }

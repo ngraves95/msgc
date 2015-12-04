@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #define CLASS() counter
 
 #include "counter.h"
 #include "class.h"
+
+static void destroy(struct counter *);
 
 private(counter,
 	int count;
@@ -23,23 +24,22 @@ method(counter,
 	return this->count;
 }
 
+static struct counter proto = {
+	.get_count = get_count,
+	.inc = inc,
+};
+
+constructor(counter, int base)
+{
+	this->count = base;
+}
+
 destructor(counter)
 {
 	free(this);
 }
 
-constructor(counter,
-	    int base)
-{
-	struct counter * self = alloc(counter);
-	if (this) {
-		register(get_count);
-		register(destroy);
-		register(inc);
-		this->count = base;
-	}
-	return self;
-}
+
 
 #ifdef CLASS
 #undef CLASS
